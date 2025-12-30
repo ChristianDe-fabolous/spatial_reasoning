@@ -1,0 +1,4 @@
+defaults:
+  - model/clip: clip_v1
+  - model/spatial_head: 
+  - datamodule: clip_data

@@ -6,19 +6,14 @@ from models.lightning_module import CLIPSpatialLightningModule
 from models.clip.clip_backbone import CLIPBackbone
 from models.spatial.spatial_head import SpatialHead
 from losses.spatial_relation_loss import SpatialRelationLoss
-from data.datamodules.clevr_dm import CLEVRDataModule
 
-@hydra.main(config_path="configs", config_name="config")
+@hydra.main(config_path="../configs", config_name="config")
 def main(cfg: DictConfig):
     # Instantiate backbone
     clip_model = CLIPBackbone(cfg.model.clip.model_name, pretrained=True)
 
-    # Instantiate spatial head
-    spatial_head = SpatialHead(
-        embed_dim=cfg.model.spatial.embed_dim,
-        hidden_dim=cfg.model.spatial.hidden_dim,
-        out_dim=cfg.model.spatial.out_dim,
-    )
+
+    spatial_head = SpatialHead(cfg)
 
     # Loss
     loss_fn = SpatialRelationLoss()
@@ -33,10 +28,8 @@ def main(cfg: DictConfig):
     )
 
     # Datamodule
-    datamodule = CLEVRDataModule(
-        batch_size=cfg.data.batch_size,
-        num_workers=cfg.data.num_workers,
-    )
+    datamodule = hydra.utils.instantiate(cfg.datamodule)
+
 
     # Callbacks
     checkpoint_cb = ModelCheckpoint(monitor="val/loss", save_top_k=1)

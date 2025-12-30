@@ -1,0 +1,6 @@
+_target_: models.trajectory_encoder.TrajectoryEncoder
+t_past: ${dataset.t_past}
+hidden_dim: 128
+embed_dim: ${model.embed_dim}
+output_type: global
+dropout: 0.1

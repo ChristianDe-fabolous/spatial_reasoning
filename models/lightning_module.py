@@ -18,11 +18,11 @@ class CLIPSpatialLightningModule(pl.LightningModule):
         self.loss_fn = loss_fn
 
     def forward(self, batch):
-        image_feats, text_feats = self.clip(
+        image_feats, text_feats, obj_feats, depth_feats = self.clip(
             batch["images"],
             batch["text"]
         )
-        spatial_preds = self.spatial_head(image_feats, text_feats)
+        spatial_preds = self.spatial_head(image_feats, text_feats, obj_feats, depth_feats)
         return spatial_preds
 
     def training_step(self, batch, batch_idx):
