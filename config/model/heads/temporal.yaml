@@ -1,0 +1,3 @@
+_target_: models.heads.TemporalHead
+hidden_dim: 1024
+out_dim: 512

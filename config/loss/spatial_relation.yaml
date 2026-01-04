@@ -1,0 +1,2 @@
+_target_: losses.spatial_relation_loss.SpatialRelationLoss
+weight: 1.0

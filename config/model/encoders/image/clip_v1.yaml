@@ -1,0 +1,7 @@
+_target_: models.encoders.image.CLIPImageEncoder
+model_name: "ViT-B/32"
+pretrained: true
+trainable: false
+hf_model: openai/clip-vit-base-patch32
+out_dim: 512
+freeze: true

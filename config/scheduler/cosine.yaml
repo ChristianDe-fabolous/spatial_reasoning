@@ -1,0 +1,3 @@
+# conf/scheduler/cosine.yaml
+t_max: 50        # total number of epochs or steps (depending on scheduler)
+eta_min: 1e-6

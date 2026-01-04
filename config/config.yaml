@@ -1,4 +1,10 @@
+# conf/config.yaml
 defaults:
-  - model/clip: clip_v1
-  - model/spatial_head: 
-  - datamodule: clip_data
+  - model: spatial_clip        # selects conf/model/spatial_clip.yaml
+  - datamodule: waymo          # selects conf/datamodule/waymo.yaml
+  - trainer: default           # selects conf/trainer/default.yaml
+  - optimizer: adamw           # selects conf/optimizer/adamw.yaml
+  - scheduler: cosine          # selects conf/scheduler/cosine.yaml
+  - loss: spatial_relation     # selects conf/loss/spatial_relation.yaml
+  - logger: wandb              # selects conf/logger/wandb.yaml  
+  - _self_                     # allows overrides at top-level

@@ -1,0 +1,4 @@
+_target_: lightning.pytorch.loggers.WandbLogger
+project: ${task_name}"
+name: "run_${now:%Y-%m-%d_%H-%M-%S}" # Auto-named by timestamp
+log_model: "all" # Save checkpoints to W&B cloud

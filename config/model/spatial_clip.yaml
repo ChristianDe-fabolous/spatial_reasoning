@@ -1,0 +1,17 @@
+_target_: src.models.spatial_clip.SpatialClip
+
+active_encoders:
+  image: true
+  text: false
+  object: true
+  depth: false
+
+encoders:
+  image: ${model.encoders.image}
+  text: ${model.encoders.text}
+  object: ${model.encoders.object}
+  depth: ${model.encoders.depth}
+
+spatial_head: ${model.heads.spatial}
+temporal_head: ${model.heads.temporal}   # optional
+

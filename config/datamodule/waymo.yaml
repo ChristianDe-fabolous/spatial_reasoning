@@ -1,9 +1,11 @@
 _target_: scripts.datamodules.WaymoDataModule
+dataset_name: "waymo_trajectory"
 batch_size: 64
 num_workers: 4
 data_dir: "data/waymo/raw"
 image_size: 224
+
 dataset_cfg:
-  use_text: ${model.active_encoders.use_text}   # Links to your model config
-  use_depth: ${model.active_encoders.use_depth}
-  use_obj: ${model.active_encoders.use_obj}
+  use_text: ${model.active_encoders.text}   # Links to your model config
+  use_depth: ${model.active_encoders.depth}
+  use_obj: ${model.active_encoders.obj}

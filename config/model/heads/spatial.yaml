@@ -1,0 +1,3 @@
+_target_: models.heads.SpatialHead
+hidden_dim: 1024
+out_dim: 512

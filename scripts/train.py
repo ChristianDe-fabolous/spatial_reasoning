@@ -2,26 +2,25 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 import hydra
 from omegaconf import DictConfig
-from models.lightning_module import CLIPSpatialLightningModule
-from models.clip.clip_backbone import CLIPBackbone
-from models.spatial.spatial_head import SpatialHead
-from losses.spatial_relation_loss import SpatialRelationLoss
+from pytorch_lightning.loggers import WandbLogger
+from models.lightning_module import SpatialClipLightningModule
+from loss.spatial_relation_loss import SpatialRelationLoss
 
 @hydra.main(config_path="../configs", config_name="config")
 def main(cfg: DictConfig):
-    # Instantiate backbone
-    clip_model = CLIPBackbone(cfg.model.clip.model_name, pretrained=True)
 
+    # Logger
+    if cfg.logger._target_ == "lightning.pytorch.loggers.WandbLogger":
+        cfg.logger.project = cfg.task_name
+    logger = hydra.utils.instantiate(cfg.logger)
 
-    spatial_head = SpatialHead(cfg)
+    # Model
+    model = hydra.utils.instantiate(cfg.model) 
 
-    # Loss
-    loss_fn = SpatialRelationLoss()
-
-    # Lightning module
-    model = CLIPSpatialLightningModule(
-        clip_model=clip_model,
-        spatial_head=spatial_head,
+    # Lightning Module
+    loss_fn = hydra.utils.instantiate(cfg.loss)
+    model = SpatialClipLightningModule(
+        model=model,
         loss_fn=loss_fn,
         optimizer_cfg=cfg.optimizer,
         scheduler_cfg=cfg.scheduler,

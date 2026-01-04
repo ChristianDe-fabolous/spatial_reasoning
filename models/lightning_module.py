@@ -2,28 +2,23 @@ import pytorch_lightning as pl
 import torch
 from torch.optim import AdamW
 
-class CLIPSpatialLightningModule(pl.LightningModule):
+class SpatialClipLightningModule(pl.LightningModule):
     def __init__(
         self,
-        clip_model,
-        spatial_head,
+        model,              
         loss_fn,
         optimizer_cfg,
         scheduler_cfg=None,
     ):
         super().__init__()
-        self.save_hyperparameters(ignore=["clip_model", "spatial_head", "loss_fn"])
-        self.clip = clip_model
-        self.spatial_head = spatial_head
+        self.save_hyperparameters(ignore=["model", "loss_fn"])
+        self.model = model
         self.loss_fn = loss_fn
 
+
     def forward(self, batch):
-        image_feats, text_feats, obj_feats, depth_feats = self.clip(
-            batch["images"],
-            batch["text"]
-        )
-        spatial_preds = self.spatial_head(image_feats, text_feats, obj_feats, depth_feats)
-        return spatial_preds
+        return self.model(batch)
+
 
     def training_step(self, batch, batch_idx):
         preds = self(batch)
@@ -48,7 +43,8 @@ class CLIPSpatialLightningModule(pl.LightningModule):
             return optimizer
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer,
-            T_max=self.hparams.scheduler_cfg.t_max
+            T_max=self.hparams.scheduler_cfg.t_max,
+            eta_min=self.hparams.scheduler_cfg.eta_min,
         )
         return {
             "optimizer": optimizer,

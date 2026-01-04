@@ -1,0 +1,4 @@
+# conf/optimizer/adamw.yaml
+lr: 3e-4
+weight_decay: 1e-2
+betas: [0.9, 0.999]
