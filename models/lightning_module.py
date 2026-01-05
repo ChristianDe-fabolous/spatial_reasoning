@@ -19,7 +19,6 @@ class SpatialClipLightningModule(pl.LightningModule):
     def forward(self, batch):
         return self.model(batch)
 
-
     def training_step(self, batch, batch_idx):
         preds = self(batch)
         loss_dict = self.loss_fn(preds, batch)

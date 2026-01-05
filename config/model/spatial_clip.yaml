@@ -5,13 +5,16 @@ active_encoders:
   text: false
   object: true
   depth: false
+  ego: true
 
 encoders:
   image: ${model.encoders.image}
   text: ${model.encoders.text}
   object: ${model.encoders.object}
   depth: ${model.encoders.depth}
+  ego: ${model.encoders.ego}
 
 spatial_head: ${model.heads.spatial}
 temporal_head: ${model.heads.temporal}   # optional
+predictor: ${model.predictors.classification}
 

@@ -1,0 +1,10 @@
+_target_: src.models.baseline.BaselineModel
+
+encoders:
+  image: ${model.encoders.image}
+  depth: ${model.encoders.depth}
+  ego: ${model.encoders.ego}
+
+spatial_head: ${model.heads.spatial}
+temporal_head: ${model.heads.temporal}   # optional
+

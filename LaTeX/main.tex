@@ -4,15 +4,38 @@
 "Does CLIP-based alignment between simple simulation and complex environments improve generalization and robustness in imitation-based planning and reinforcement learning?"
 Or more generally:
 "Does CLIP solve the sim-to-real gap for imitation-based planning and reinforcement learning?"
+"Can we leverage CLIP-based representations to plan ahead in complex environments more effectively than traditional methods and as long as simple simulation environments are correct in their abstractions, follow them?" 
+
 
 Sub-questions:
 "Can CLIP-based help form abstract representations through various encoders or should all abstractions be formed through a single transformer architecture?"
 "Can CLIP-based encoders serve as the foundation for building multi-level abstractions and therefore serve as possible more fine-grained update mechanisms for imitation-based learning and reinforcement learning?"
+"If planning and abstraction in simulation environments is possible, can these abstractions be used for better learning signals in complex environments?"
 
 CLIP-variation: Instead of just calculating the dot product between image and text embeddings, we can also consider using addition of embeddings and then contrasting against the set of all other embeddings.
+
+If we have multiple domains, e.g. text and video, can we reason in text so that we can plan in video? and achieve a stronger learning signal?
+Especially if we have a strong prior on the text domain, can we leverage this to plan in video?
+And could test reasoning help to tackle out of distribution generalization in video?
+
+
 \paragraph{Introduction}
+Self-driving is an unsolved problem in AI research. Part of the challenge lies in the complexity of real-world environments, which are noisy and dynamic. 
+
+With the rise of inference-based computation and large-scale pretraining, models should learn to allocate resources on different levels - the question behind this thought is: Can 'thinking' occur effectively in a global state space, or is a breakdown into sub-components more useful for generalization and robustness?
+How to answer this question? 
 
 
+First, attention
+
+This is even more the case, if we assume that attention is a limited resource, and that the model has to learn to allocate the attention to the most relevant parts of the input. If our model simulates future states and actions in an complex environment, it has to learn to focus on ...
+
+Our model could achieve three things: First generalization to unseen environments, robustness to noise and preturbations and finally, sample efficiency in learning from few exmpales. 
+
+Both generalization and robustness suffer from the curse of problem delegation - if the model has to learn to extract relevant features from raw sensory input, both the extraction and the downsteam task have to be learned jointly. 
+
+The question is: Can we 
+Then again could it also be extended to spatial reasoning tasks, where the model has to learn to understand the spatial relationships between objects in the environment?
 
 \paragraph{Related Work}
 

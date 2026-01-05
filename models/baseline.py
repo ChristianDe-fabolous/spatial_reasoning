@@ -2,11 +2,10 @@ import torch
 import torch.nn as nn
 import hydra
 
-class SpatialClip(nn.Module):
+class SpatialCrossAttention(nn.Module):
     def __init__(
         self,
         encoders,
-        active_encoders,
         spatial_head,
         temporal_head=None,
         predictor=None,
@@ -14,13 +13,14 @@ class SpatialClip(nn.Module):
         super().__init__()
 
         self.encoders = nn.ModuleDict()
+        self.projectors = nn.ModuleDict()
         fused_dim = 0
 
         for name, cfg in encoders.items():
-            if active_encoders.get(name):
-                enc = hydra.utils.instantiate(cfg)
-                self.encoders[name] = enc
-                fused_dim += enc.out_dim
+            enc = hydra.utils.instantiate(cfg)
+            self.encoders[name] = enc
+            self.projectors[name] = nn.Linear(enc.out_dim, enc.out_dim)
+            fused_dim += enc.out_dim
 
         self.spatial_head = hydra.utils.instantiate(
             spatial_head,
@@ -39,34 +39,28 @@ class SpatialClip(nn.Module):
             self.temporal_head = None
             temporal_out_dim = spatial_out_dim
 
-        self.predictor = hydra.utils.instantiate(predictor)
         self.out_dim = temporal_out_dim
 
+        self.predictor = hydra.utils.instantiate(predictor)
+
     def forward(self, batch):
-        feats = []
+        context_tokens = []
 
-        if "image" in self.encoders:
-            feats.append(self.encoders["image"](batch["images"]))
+        for name, encoder in self.encoders.items():
+            raw_feat = encoder(batch[name])
 
-        if "text" in self.encoders:
-            feats.append(self.encoders["text"](batch["text"]))
+            projected = self.predictors[name](raw_feat)
+            context_tokens.append(projected)
 
-        if "object" in self.encoders:
-            feats.append(self.encoders["object"](batch["objects"]))
-        
-        if "depth" in self.encoders:
-            feats.append(self.encoders["depth"](batch["depth"]))
-        
-        if "ego" in self.encoders:
-            feats.append(self.encoders["ego"](batch["ego"]))
 
-        x = torch.cat(feats, dim=-1)
+        context = torch.cat(context_tokens, dim=1)
 
         x = self.spatial_head(x)
 
         if self.temporal_head is not None:
             x = self.temporal_head(x)
 
+        noisy_future = torch.randn(batch["trajectory"].shape).to(self.device)
         x = self.predictor(x)
 
-        return x
+        

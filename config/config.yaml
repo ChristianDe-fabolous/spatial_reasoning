@@ -1,6 +1,6 @@
 # conf/config.yaml
 defaults:
-  - model: spatial_clip        # selects conf/model/spatial_clip.yaml
+  - model: baseline            # selects spatial_clip.yaml or baseline.yaml
   - datamodule: waymo          # selects conf/datamodule/waymo.yaml
   - trainer: default           # selects conf/trainer/default.yaml
   - optimizer: adamw           # selects conf/optimizer/adamw.yaml

@@ -17,8 +17,10 @@ def main(cfg: DictConfig):
     # Model
     model = hydra.utils.instantiate(cfg.model) 
 
-    # Lightning Module
+    # Loss
     loss_fn = hydra.utils.instantiate(cfg.loss)
+    
+    # Lightning Module
     model = SpatialClipLightningModule(
         model=model,
         loss_fn=loss_fn,
